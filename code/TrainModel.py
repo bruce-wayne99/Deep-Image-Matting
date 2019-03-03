@@ -162,7 +162,7 @@ def train_model(model, optimizer, dataset, epoch, cuda=False):
         loss = alpha_loss*0.5 + comp_loss*0.5
         loss.backward()
         optimizer.step()
-        if iteration % 1000 == 0:
+        if iteration % 1 == 0:
             print(iteration, epoch, loss)
 
 
@@ -194,7 +194,7 @@ def main(cuda=True):
     vgg_path = '/scratch/matting/dataset/vgg_state_dict.pth'
     fg_file = '/scratch/matting/dataset/Training_set/training_fg_names.txt'
     bg_file = '/scratch/matting/dataset/Training_set/training_bg_names.txt'
-    epochs = 40
+    epochs = 10
     files_list = get_files_list(fg_file, bg_file)
 #     print(files_list)
     dataset = load_dataset(fg_path, alpha_path, bg_path, files_list)
@@ -208,8 +208,7 @@ def main(cuda=True):
 #     return
     for i in range(epochs):
         train_model(model, optimizer, dataset, i, cuda)
-        if i > 0 and i % 5 == 0:
-            save_model('/scratch/matting/model_' + i + '.pth', model)
+        save_model('/scratch/matting/model_' + str(i) + '.pth', model)
     save_model('/scratch/matting/model_final.pth', model)
 main()
 
